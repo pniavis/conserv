@@ -7,14 +7,14 @@ module core_memory(
 
     assign bus.ren = m.valid & m.mem_ren;
     assign bus.wen = m.valid & m.mem_wen;
-    assign bus.raddr = m.alu_out;
-    assign bus.waddr = m.alu_out;
+    assign bus.raddr = m.alu_sum;
+    assign bus.waddr = m.alu_sum;
 
     core_store su(
         .bus_out(bus.wdata), .reg_in(m.rs2),
         .bytemask(bus.bytemask),
         .access_type(m.mem_type),
-        .offset(m.alu_out[1:0])
+        .offset(m.alu_sum[1:0])
     );
 
     assign m.ready = w.ready & 1'b1;
@@ -28,6 +28,7 @@ module core_memory(
                 w.reg_wen <= m.reg_wen;
                 w.reg_wsel <= m.reg_wsel;
                 w.alu_out <= m.alu_out;
+                w.alu_sum <= m.alu_sum;
                 w.mem_type <= m.mem_type;
                 w.valid <= 1;
             end

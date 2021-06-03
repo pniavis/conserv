@@ -143,6 +143,7 @@ interface m_if();
     logic reg_wen;
     reg_wsel_t reg_wsel;
     logic [31:0] alu_out;
+    logic [31:0] alu_sum;
     logic [2:0] mem_type;
     logic mem_ren, mem_wen;
 
@@ -155,6 +156,7 @@ interface m_if();
                 reg_wen,
                 reg_wsel,
                 alu_out,
+                alu_sum,
                 mem_type,
                 mem_ren, mem_wen,
         output  ready
@@ -169,6 +171,7 @@ interface m_if();
                 reg_wen,
                 reg_wsel,
                 alu_out,
+                alu_sum,
                 mem_type,
                 mem_ren, mem_wen,
         input   ready
@@ -192,6 +195,7 @@ interface w_if();
     logic reg_wen;
     reg_wsel_t reg_wsel;
     logic [31:0] alu_out;
+    logic [31:0] alu_sum;
     logic [2:0] mem_type;
     logic [31:0] mem_rdata;
 
@@ -203,6 +207,7 @@ interface w_if();
                 reg_wen,
                 reg_wsel,
                 alu_out,
+                alu_sum,
                 mem_type,
                 mem_rdata,
         output  ready
@@ -216,6 +221,7 @@ interface w_if();
                 reg_wen,
                 reg_wsel,
                 alu_out,
+                alu_sum,
                 mem_type,
                 mem_rdata,
         input   ready

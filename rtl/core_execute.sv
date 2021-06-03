@@ -44,6 +44,7 @@ module core_execute(
                 m.reg_wen <= x.reg_wen;
                 m.reg_wsel <= x.reg_wsel;
                 m.alu_out <= alu_out;
+                m.alu_sum <= alu_sum;
                 m.mem_type <= x.mem_type;
                 m.mem_ren <= x.mem_ren;
                 m.mem_wen <= x.mem_wen;

@@ -10,7 +10,7 @@ module core_wback(
     core_load lu(
         .bus_in(w.mem_rdata), .reg_out(lu_out),
         .access_type(w.mem_type),
-        .offset(w.alu_out[1:0])
+        .offset(w.alu_sum[1:0])
     );
 
 

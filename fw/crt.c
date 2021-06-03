@@ -1,6 +1,8 @@
 extern unsigned int __data_init__;
 extern unsigned int __data_start__, __data_end__;
 
+int main(void);
+
 void crt(void) __attribute__((section(".text.crt")));
 void crt(void)
 {
@@ -12,6 +14,7 @@ void crt(void)
     while (dst < &__data_end__)
         *dst++ = *src++;
 
-    asm volatile("call main\n");
+    (void) main();
+    while (1);
 }
 

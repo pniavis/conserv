@@ -9,6 +9,7 @@ struct uart {
 
 static inline void _putchar(char c)
 {
+    while (uart->data);
     uart->data = c;
 }
 

@@ -1,11 +1,11 @@
-module core_fetch(
+module core_fetch
+#(logic [31:0] RESET_ADDR = 32'h0)
+(
     input  logic clk, rst,
     f_if.master f,
     d_if.slave d,
     bus_if.master bus
 );
-    parameter logic [31:0] RESET_ADDR = 32'h0;
-
     logic [31:0] pc, pc_next;
 
     assign bus.raddr = pc_next;

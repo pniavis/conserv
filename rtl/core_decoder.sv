@@ -109,7 +109,6 @@ module core_decoder(
                 {dec.want_rs1, dec.want_rs2} = 2'b00;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_PC4;
-                dec.aluop = ALU_ADD;
                 {dec.asel, dec.bsel} = {ASEL_PC, BSEL_IMM};
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
                 dec.is_jump = 1'b1;
@@ -120,7 +119,6 @@ module core_decoder(
                 {dec.want_rs1, dec.want_rs2} = 2'b10;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_PC4;
-                dec.aluop = ALU_ADD;
                 {dec.asel, dec.bsel} = {ASEL_REG, BSEL_IMM};
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
                 dec.is_jump = 1'b1;
@@ -130,7 +128,6 @@ module core_decoder(
             begin
                 {dec.want_rs1, dec.want_rs2} = 2'b11;
                 dec.reg_wen = 1'b0;
-                dec.aluop = ALU_ADD;
                 {dec.asel, dec.bsel} = {ASEL_PC, BSEL_IMM};
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
                 dec.is_jump = 1'b0;
