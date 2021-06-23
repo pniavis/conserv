@@ -4,7 +4,7 @@ module core_fetch
     input  logic clk, rst,
     f_if.master f,
     d_if.slave d,
-    bus_if.master bus
+    bus_if.master_rdonly bus
 );
     logic [31:0] pc, pc_next;
 
@@ -12,7 +12,9 @@ module core_fetch
     assign bus.ren = d.ready;
 
     always_comb begin
-        if (f.pc_load)
+        if (!d.ready)
+            pc_next = pc;
+        else if (f.pc_load)
             pc_next = f.pc_new;
         else
             pc_next = pc + 32'd4;
@@ -21,7 +23,7 @@ module core_fetch
     always_ff @(posedge clk) begin
         if (rst)
             pc <= RESET_ADDR - 32'd4;
-        else if (d.ready)
+        else
             pc <= pc_next;
     end
 

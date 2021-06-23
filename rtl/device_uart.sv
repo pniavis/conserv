@@ -1,8 +1,10 @@
 module device_uart(
-    input clk, rst,
-    input RxD,
-    output TxD,
-    bus_if.slave bus
+    input  logic clk, rst,
+    input  logic RxD,
+    output logic TxD,
+    bus_if.slave bus,
+    output logic [7:0] rx_data,
+    output logic rx_tick
 );
 
     localparam ADDR_WIDTH = 8;
@@ -39,6 +41,8 @@ module device_uart(
                 .addr_r(rxfifo_addr_r), .addr_w(rxfifo_addr_w));
     uart_rx rxuart(.clk(clk), .rst(rst), .data(rxuart_data),
                 .rx_tick(rxuart_tick), .RxD(RxD));
+    assign rx_data = rxuart_data;
+    assign rx_tick = rxuart_tick;
 
 
     always_ff @(posedge clk) begin
@@ -123,7 +127,7 @@ module uart_tx(
 );
 
     logic bit_tick;
-    baud_generator #(.INC(20'd201)) brgen(
+    baud_generator #(.INC(20'd2416)) brgen(
         .clk(clk), .enable(busy), .tick(bit_tick));
 
     logic [3:0] bit_cnt;
@@ -177,7 +181,7 @@ module uart_rx(
         RxD_sync <= {RxD_sync[0], RxD};
     assign rx = RxD_sync[1];
     
-    baud_generator #(.INC(20'd1611)) brgen(
+    baud_generator #(.INC(20'd19327)) brgen(
         .clk(clk), .enable(1'b1), .tick(bit_tick8));
     assign debug = bit_tick8;
 

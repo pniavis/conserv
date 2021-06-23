@@ -15,6 +15,18 @@ interface bus_if();
                ren, wen,
                bytemask
     );
+    
+    modport master_rdonly(
+        input  rdata,
+        output raddr, ren
+    );
+    
+    modport master_wronly(
+        output waddr,
+               wdata,
+               wen,
+               bytemask
+    );
 
     modport slave(
         output rdata,

@@ -2,7 +2,7 @@ module bus_controller(
     input clk,
     bus_if.slave cpu,
     bus_if.master ram,
-    bus_if.master rom,
+    bus_if.master_rdonly rom,
     bus_if.master uart
 );
 

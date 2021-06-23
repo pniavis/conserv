@@ -2,7 +2,7 @@ module core_cpu
 #(RESET_ADDR=32'h10000000)
 (
     input  logic clk, rst,
-    bus_if.master instr_bus,
+    bus_if.master_rdonly instr_bus,
     bus_if.master data_bus
 );
 

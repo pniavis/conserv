@@ -3,7 +3,8 @@ module top(
     input  logic clk,
     input  logic [0:0] sw,
     input  logic RxD,
-    output logic TxD
+    output logic TxD,
+    output logic led
 `else
     input  logic clk,
     input  logic rst,
@@ -13,20 +14,25 @@ module top(
 
 `ifdef SYNTHESIS
     logic [2:0] rst_sync = 3'b111;
-    logic rst;
-
     always_ff @(posedge clk)
         rst_sync = {rst_sync[1:0], ~sw[0]};
 
-    assign rst = rst_sync[2];
+        logic master_rst;
+    logic prog_rst;
+    logic rst;
+
+    assign master_rst = rst_sync[2];
+    assign rst = master_rst | prog_rst;
+
+    assign led = prog_rst;
 `endif
 
     bus_if rom_bus_data();
     bus_if rom_bus_instr();
-    rom #(.IMAGE("imem.ram"), .ADDR_WIDTH(12)) rom0(
+    rom #(.IMAGE("imem.ram"), .ADDR_WIDTH(14)) rom0(
         .clk(clk),
-        .bus0(rom_bus_data.slave),
-        .bus1(rom_bus_instr.slave)
+        .bus1(rom_bus_instr.slave),
+        .bus0(rom_bus_data.slave)
     );
 
     bus_if ram_bus();
@@ -36,9 +42,13 @@ module top(
 
     bus_if uart_bus();
 `ifdef SYNTHESIS
+    logic [7:0] uart_rx_data;
+    logic uart_rx_tick;
     device_uart uart(
-        .clk(clk), .rst(rst),
+        .clk(clk), .rst(master_rst),
         .TxD(TxD), .RxD(RxD),
+        .rx_data(uart_rx_data),
+        .rx_tick(uart_rx_tick),
         .bus(uart_bus.slave)
     );
 `else
@@ -51,7 +61,7 @@ module top(
     bus_if core_data_bus();
     core_cpu cpu(
         .clk(clk), .rst(rst),
-        .instr_bus(rom_bus_instr.master),
+        .instr_bus(rom_bus_instr.master_rdonly),
         .data_bus(core_data_bus.master)
     );
 
@@ -59,9 +69,19 @@ module top(
         .clk(clk),
         .cpu(core_data_bus.slave),
         .ram(ram_bus.master),
-        .rom(rom_bus_data.master),
+        .rom(rom_bus_data.master_rdonly),
         .uart(uart_bus)
     );
+
+`ifdef SYNTHESIS
+    programmer rom_prog(
+        .clk(clk), .rst_in(master_rst), .rst_out(prog_rst),
+        .data(uart_rx_data), .data_tick(uart_rx_tick),
+        .rom_bus(rom_bus_data.master_wronly)
+    );
+`else
+    assign rom_bus_data.wen = 1'b0;
+`endif
 
 
 `ifndef SYNTHESIS
