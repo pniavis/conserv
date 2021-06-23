@@ -11,9 +11,15 @@ module core_hazzard(
         d.stall |= (d.rs2 != 0) & x.valid & x.reg_wen & (d.rs2 == x.rd);
         d.stall |= (d.rs1 != 0) & m.valid & m.reg_wen & (d.rs1 == m.rd);
         d.stall |= (d.rs2 != 0) & m.valid & m.reg_wen & (d.rs2 == m.rd);
-        d.stall |= (d.rs1 != 0) & w.valid & w.reg_wen & (d.rs1 == w.rd);
-        d.stall |= (d.rs2 != 0) & w.valid & w.reg_wen & (d.rs2 == w.rd);
+        /*d.stall |= (d.rs1 != 0) & w.valid & w.reg_wen & (d.rs1 == w.rd);
+        d.stall |= (d.rs2 != 0) & w.valid & w.reg_wen & (d.rs2 == w.rd);*/
         d.stall &= d.valid & ~d.flush;
+    end
+
+    always_comb begin
+        d.fwd_value = w.wdata;
+        d.fwd_rs1en = w.valid & w.reg_wen & w.rd != 0 & (w.rd == d.rs1);
+        d.fwd_rs2en = w.valid & w.reg_wen & w.rd != 0 & (w.rd == d.rs2);
     end
 
 endmodule

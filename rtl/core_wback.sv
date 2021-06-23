@@ -32,5 +32,6 @@ module core_wback(
     assign rf_wdata = wdata;
 
     assign w.ready = 1'b1;
+    assign w.wdata = wdata;
 
 endmodule

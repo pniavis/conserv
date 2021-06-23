@@ -12,11 +12,16 @@ module core_decode(
     dec_t dec;
     core_decoder decoder(.ir(d.ir), .dec(dec));
 
+    logic [31:0] rs1, rs2;
+
     assign rf_raddr1 = dec.rs1_raw;
     assign rf_raddr2 = dec.rs2_raw;
 
     assign d.rs1 = dec.rs1;
     assign d.rs2 = dec.rs2;
+
+    assign rs1 = d.fwd_rs1en ? d.fwd_value : rf_rdata1;
+    assign rs2 = d.fwd_rs2en ? d.fwd_value : rf_rdata2;
 
     assign d.csr_addr = dec.csr_addr;
 
@@ -26,8 +31,8 @@ module core_decode(
         6'b000110: begin
                 x.pc <= d.pc;
                 x.imm <= dec.imm;
-                x.rs1 <= rf_rdata1;
-                x.rs2 <= rf_rdata2;
+                x.rs1 <= rs1;
+                x.rs2 <= rs2;
                 x.rd <= dec.rd;
                 x.reg_wen <= dec.reg_wen;
                 x.reg_wsel <= dec.reg_wsel;

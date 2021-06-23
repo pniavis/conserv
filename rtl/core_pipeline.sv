@@ -24,7 +24,8 @@ interface d_if();
     logic stall;
     logic flush;
     rv::instr_t ir;
-    logic want_rs1, want_rs2;
+    logic [31:0] fwd_value;
+    logic fwd_rs1en, fwd_rs2en;
     rv::regaddr_t rs1, rs2;
     rv::csr_addr_t csr_addr;
     logic [31:0] csr_value;
@@ -34,11 +35,12 @@ interface d_if();
                 pc,
                 ir,
                 csr_value,
+                fwd_value,
+                fwd_rs1en, fwd_rs2en,
                 stall,
                 flush,
         output  ready,
-                want_rs1, rs1,
-                want_rs2, rs2,
+                rs1, rs2,
                 csr_addr
     );
 
@@ -52,9 +54,10 @@ interface d_if();
     modport hazzard(
         input   valid,
                 flush,
-                want_rs1, rs1,
-                want_rs2, rs2,
-        output  stall
+                rs1, rs2,
+        output  fwd_value,
+                fwd_rs1en, fwd_rs2en,
+                stall
     );
 
     modport branch(
@@ -217,6 +220,7 @@ interface w_if();
     logic [31:0] alu_sum;
     logic [2:0] mem_type;
     logic [31:0] mem_rdata;
+    logic [31:0] wdata;
     logic [31:0] csr_value;
 
     modport master(
@@ -232,7 +236,8 @@ interface w_if();
                 mem_type,
                 mem_rdata,
                 csr_value,
-        output  ready
+        output  wdata,
+                ready
     );
 
     modport slave(
@@ -254,7 +259,8 @@ interface w_if();
     modport hazzard(
         input   valid,
                 reg_wen,
-                rd
+                rd,
+                wdata
     );
 
     modport csr(
