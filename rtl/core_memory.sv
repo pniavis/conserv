@@ -17,7 +17,20 @@ module core_memory(
         .offset(m.alu_sum[1:0])
     );
 
+    logic [31:0] wdata;
+    always_comb begin
+        case (m.reg_wsel)
+        REG_WSEL_ALU: wdata = m.alu_out;
+        REG_WSEL_IMM: wdata = m.imm;
+        REG_WSEL_PC : wdata = m.pc;
+        REG_WSEL_PC4: wdata = m.pc4;
+        REG_WSEL_CSR: wdata = m.csr_value;
+        default     : wdata = 'x;
+        endcase
+    end
+
     assign m.ready = w.ready & 1'b1;
+    assign m.wdata = wdata;
     assign w.mem_rdata = bus.rdata;
     always_ff @(posedge clk) begin
         casez ({rst, 1'b0, 1'b0, m.valid, w.ready, 1'b0})

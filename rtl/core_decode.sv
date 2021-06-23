@@ -20,8 +20,8 @@ module core_decode(
     assign d.rs1 = dec.rs1;
     assign d.rs2 = dec.rs2;
 
-    assign rs1 = d.fwd_rs1en ? d.fwd_value : rf_rdata1;
-    assign rs2 = d.fwd_rs2en ? d.fwd_value : rf_rdata2;
+    assign rs1 = d.fwd_rs1en ? d.fwd_value1 : rf_rdata1;
+    assign rs2 = d.fwd_rs2en ? d.fwd_value2 : rf_rdata2;
 
     assign d.csr_addr = dec.csr_addr;
 
