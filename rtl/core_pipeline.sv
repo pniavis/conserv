@@ -24,9 +24,12 @@ interface d_if();
     logic stall;
     logic flush;
     rv::instr_t ir;
+    logic [31:0] imm;
     logic [31:0] fwd_value1, fwd_value2;
     logic fwd_rs1en, fwd_rs2en;
     rv::regaddr_t rs1, rs2;
+    logic is_branch;
+    logic predicted_taken;
     rv::csr_addr_t csr_addr;
     logic [31:0] csr_value;
 
@@ -37,10 +40,13 @@ interface d_if();
                 csr_value,
                 fwd_value1, fwd_value2,
                 fwd_rs1en, fwd_rs2en,
+                predicted_taken,
                 stall,
                 flush,
         output  ready,
                 rs1, rs2,
+                is_branch,
+                imm,
                 csr_addr
     );
 
@@ -61,7 +67,13 @@ interface d_if();
     );
 
     modport branch(
-        output  flush
+        input   valid,
+                ready,
+                pc,
+                is_branch,
+                imm,
+        output  flush,
+                predicted_taken
     );
 
     modport csr(
@@ -89,6 +101,7 @@ interface x_if();
     logic is_jump;
     logic is_branch;
     rv::funct3b_t branch_cond;
+    logic predicted_taken;
     logic [31:0] csr_value;
 
     modport master(
@@ -126,6 +139,7 @@ interface x_if();
                 is_jump,
                 is_branch,
                 branch_cond,
+                predicted_taken,
                 csr_value,
         input   ready
     );
@@ -138,11 +152,13 @@ interface x_if();
 
     modport branch(
         input   valid,
+                pc,
                 pc_new,
                 rs1, rs2,
                 is_jump,
                 is_branch,
-                branch_cond
+                branch_cond,
+                predicted_taken
     );
 endinterface
 

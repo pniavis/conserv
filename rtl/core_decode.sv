@@ -19,11 +19,13 @@ module core_decode(
 
     assign d.rs1 = dec.rs1;
     assign d.rs2 = dec.rs2;
+    assign d.imm = dec.imm;
 
     assign rs1 = d.fwd_rs1en ? d.fwd_value1 : rf_rdata1;
     assign rs2 = d.fwd_rs2en ? d.fwd_value2 : rf_rdata2;
 
     assign d.csr_addr = dec.csr_addr;
+    assign d.is_branch = dec.is_branch;
 
     assign d.ready = d.flush | (~d.stall & x.ready);
     always_ff @(posedge clk) begin
@@ -45,6 +47,7 @@ module core_decode(
                 x.is_jump <= dec.is_jump;
                 x.is_branch <= dec.is_branch;
                 x.branch_cond <= dec.branch_cond;
+                x.predicted_taken <= d.predicted_taken;
                 x.csr_value <= d.csr_value;
                 x.valid <= 1'b1;
             end

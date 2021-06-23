@@ -3,6 +3,7 @@ module core_branch(
     d_if.branch d,
     x_if.branch x
 );
+    logic is_brj;
     logic fire;
 
     logic lt, ltu, eq;
@@ -25,20 +26,30 @@ module core_branch(
     end
 
     always_comb begin
-        fire = x.is_jump;
-        fire |= x.is_branch && satisfied;
-        fire &= x.valid;
+        is_brj = x.valid & (x.is_branch | x.is_jump);
+        fire = x.is_jump | (x.is_branch & satisfied);
     end
 
     always_comb begin
         d.flush = 1'b0;
+        d.predicted_taken = 1'b0;
         f.pc_load = 1'b0;
         f.pc_new = 'x;
 
-        if (fire) begin
-            d.flush = 1'b1;
+        if (is_brj) begin
+            if(fire & !x.predicted_taken) begin
+                d.flush = 1'b1;
+                f.pc_load = 1'b1;
+                f.pc_new = x.pc_new;
+            end else if(!fire & x.predicted_taken) begin
+                d.flush = 1'b1;
+                f.pc_load = 1'b1;
+                f.pc_new = x.pc + 32'd4;
+            end
+        end else if (d.valid & d.is_branch & d.imm[31]) begin
             f.pc_load = 1'b1;
-            f.pc_new = x.pc_new;
+            f.pc_new = d.pc + d.imm;
+            d.predicted_taken = 1'b1;
         end
     end
 endmodule
