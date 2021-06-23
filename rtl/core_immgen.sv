@@ -21,6 +21,7 @@ module core_immgen(
         rv::OPCODE_AUIPC : out = immu;
         rv::OPCODE_JALR  : out = immi;
         rv::OPCODE_JAL   : out = immj;
+        rv::OPCODE_SYSTEM: out = immi;
         default          : out = 'x;
         endcase
     end

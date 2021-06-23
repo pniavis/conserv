@@ -22,6 +22,7 @@ module core_wback(
         REG_WSEL_MEM: wdata = lu_out;
         REG_WSEL_PC : wdata = w.pc;
         REG_WSEL_PC4: wdata = w.pc + 32'h4;
+        REG_WSEL_CSR: wdata = w.csr_value;
         default     : wdata = 'x;
         endcase
     end

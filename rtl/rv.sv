@@ -9,7 +9,8 @@ package rv;
         OPCODE_JAL       = 5'b11011,
         OPCODE_JALR      = 5'b11001,
         OPCODE_LUI       = 5'b01101,
-        OPCODE_AUIPC     = 5'b00101
+        OPCODE_AUIPC     = 5'b00101,
+        OPCODE_SYSTEM    = 5'b11100
     } opcode_t;
     
     typedef logic [4:0] regaddr_t;
@@ -56,6 +57,11 @@ package rv;
         FUNCT3_BLTU      = 3'b110,
         FUNCT3_BGEU      = 3'b111
     } funct3b_t;
+
+    typedef enum logic [11:0] {
+        CSR_CYCLE       = 12'hc00,
+        CSR_INSTRET     = 12'hc02
+    } csr_addr_t;
 
     localparam INSTR_NOP = 32'h00000013;
 

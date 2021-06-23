@@ -33,6 +33,7 @@
         logic is_jump;
         logic is_branch;
         rv::funct3b_t branch_cond;
+        rv::csr_addr_t csr_addr;
     } dec_t;
 
 `endif

@@ -132,7 +132,15 @@ module core_decoder(
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
                 dec.is_jump = 1'b0;
                 dec.is_branch = 1'b1;
-                dec.branch_cond = rv::funct3b_t'(ir.funct3);
+            end
+        rv::OPCODE_SYSTEM:
+            begin
+                {dec.want_rs1, dec.want_rs2} = 2'b00;
+                dec.reg_wen = 1'b1;
+                dec.reg_wsel = REG_WSEL_CSR;
+                {dec.mem_ren, dec.mem_wen} = 2'b00;
+                dec.is_jump = 1'b0;
+                dec.is_branch = 1'b0;
             end
         default:
             begin
@@ -143,6 +151,8 @@ module core_decoder(
         {dec.rs1, dec.rs2, dec.rd} = {ir.rs1, ir.rs2, ir.rd};
         dec.imm = imm;
         dec.mem_type = ir.funct3;
+        dec.branch_cond = rv::funct3b_t'(ir.funct3);
+        dec.csr_addr = rv::csr_addr_t'(imm[11:0]);
     end
 
 endmodule

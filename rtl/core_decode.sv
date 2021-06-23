@@ -18,6 +18,8 @@ module core_decode(
     assign {d.rs1, d.want_rs1} = {dec.rs1, dec.want_rs1};
     assign {d.rs2, d.want_rs2} = {dec.rs2, dec.want_rs2};
 
+    assign d.csr_addr = dec.csr_addr;
+
     assign d.ready = d.flush | (~d.stall & x.ready);
     always_ff @(posedge clk) begin
         casez ({rst, d.flush, d.stall, d.valid, x.ready, 1'b0})
@@ -38,6 +40,7 @@ module core_decode(
                 x.is_jump <= dec.is_jump;
                 x.is_branch <= dec.is_branch;
                 x.branch_cond <= dec.branch_cond;
+                x.csr_value <= d.csr_value;
                 x.valid <= 1'b1;
             end
         6'b00??0?: begin

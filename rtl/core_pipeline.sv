@@ -26,16 +26,20 @@ interface d_if();
     rv::instr_t ir;
     logic want_rs1, want_rs2;
     rv::regaddr_t rs1, rs2;
+    rv::csr_addr_t csr_addr;
+    logic [31:0] csr_value;
 
     modport master(
         input   valid,
                 pc,
                 ir,
+                csr_value,
                 stall,
                 flush,
         output  ready,
                 want_rs1, rs1,
-                want_rs2, rs2
+                want_rs2, rs2,
+                csr_addr
     );
 
     modport slave(
@@ -55,6 +59,11 @@ interface d_if();
 
     modport branch(
         output  flush
+    );
+
+    modport csr(
+        input   csr_addr,
+        output  csr_value
     );
 endinterface
 
@@ -77,6 +86,7 @@ interface x_if();
     logic is_jump;
     logic is_branch;
     rv::funct3b_t branch_cond;
+    logic [31:0] csr_value;
 
     modport master(
         input   valid,
@@ -93,6 +103,7 @@ interface x_if();
                 is_jump,
                 is_branch,
                 branch_cond,
+                csr_value,
         output  ready,
                 pc_new
     );
@@ -112,6 +123,7 @@ interface x_if();
                 is_jump,
                 is_branch,
                 branch_cond,
+                csr_value,
         input   ready
     );
 
@@ -174,6 +186,7 @@ interface m_if();
                 alu_sum,
                 mem_type,
                 mem_ren, mem_wen,
+                csr_value,
         input   ready
     );
 
@@ -198,6 +211,7 @@ interface w_if();
     logic [31:0] alu_sum;
     logic [2:0] mem_type;
     logic [31:0] mem_rdata;
+    logic [31:0] csr_value;
 
     modport master(
         input   valid,
@@ -224,6 +238,7 @@ interface w_if();
                 alu_sum,
                 mem_type,
                 mem_rdata,
+                csr_value,
         input   ready
     );
 
@@ -231,5 +246,9 @@ interface w_if();
         input   valid,
                 reg_wen,
                 rd
+    );
+
+    modport csr(
+        input   valid
     );
 endinterface

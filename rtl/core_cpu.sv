@@ -65,4 +65,9 @@ module core_cpu
         .m(m.hazzard), .w(w.hazzard)
     );
 
+    core_csr csr(
+        .clk(clk), .rst(rst),
+        .d(d.csr), .w(w.csr)
+    );
+
 endmodule

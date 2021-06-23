@@ -48,6 +48,7 @@ module core_execute(
                 m.mem_type <= x.mem_type;
                 m.mem_ren <= x.mem_ren;
                 m.mem_wen <= x.mem_wen;
+                m.csr_value <= x.csr_value;
                 m.valid <= 1;
             end
         6'b00??0?: begin

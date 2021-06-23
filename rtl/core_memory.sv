@@ -30,6 +30,7 @@ module core_memory(
                 w.alu_out <= m.alu_out;
                 w.alu_sum <= m.alu_sum;
                 w.mem_type <= m.mem_type;
+                w.csr_value <= m.csr_value;
                 w.valid <= 1;
             end
         6'b00??0?: begin
