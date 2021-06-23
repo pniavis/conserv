@@ -11,7 +11,7 @@ module top(
 );
 
 `ifdef SYNTHESIS
-    logic [2:0] rst_sync;
+    logic [2:0] rst_sync = 3'b111;
     logic rst;
 
     always_ff @(posedge clk)
