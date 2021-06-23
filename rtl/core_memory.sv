@@ -23,6 +23,7 @@ module core_memory(
         casez ({rst, 1'b0, 1'b0, m.valid, w.ready, 1'b0})
         6'b000110: begin
                 w.pc <= m.pc;
+                w.pc4 <= m.pc4;
                 w.imm <= m.imm;
                 w.rd <= m.rd;
                 w.reg_wen <= m.reg_wen;

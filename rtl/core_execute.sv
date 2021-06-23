@@ -38,6 +38,7 @@ module core_execute(
         casez ({rst, 1'b0, 1'b0, x.valid, m.ready, busy})
         6'b000110: begin
                 m.pc <= x.pc;
+                m.pc4 <= x.pc + 4;
                 m.imm <= x.imm;
                 m.rs2 <= x.rs2;
                 m.rd <= x.rd;

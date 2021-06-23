@@ -12,7 +12,7 @@ module core_regfile(
         if (wen) file[waddr] <= wdata;
     end
     
-    assign rdata1 = (raddr1 == 0) ? '0 : file[raddr1];
-    assign rdata2 = (raddr2 == 0) ? '0 : file[raddr2];
+    assign rdata1 = (raddr1 == 0) ? 32'h0 : file[raddr1];
+    assign rdata2 = (raddr2 == 0) ? 32'h0 : file[raddr2];
 
 endmodule

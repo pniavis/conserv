@@ -149,6 +149,7 @@ interface m_if();
     logic ready;
 
     logic [31:0] pc;
+    logic [31:0] pc4;
     logic [31:0] imm;
     logic [31:0] rs2;
     rv::regaddr_t rd;
@@ -158,10 +159,12 @@ interface m_if();
     logic [31:0] alu_sum;
     logic [2:0] mem_type;
     logic mem_ren, mem_wen;
+    logic [31:0] csr_value;
 
     modport master(
         input   valid,
                 pc,
+                pc4,
                 imm,
                 rs2,
                 rd,
@@ -171,12 +174,14 @@ interface m_if();
                 alu_sum,
                 mem_type,
                 mem_ren, mem_wen,
+                csr_value,
         output  ready
     );
 
     modport slave(
         output  valid,
                 pc,
+                pc4,
                 imm,
                 rs2,
                 rd,
@@ -203,6 +208,7 @@ interface w_if();
     logic ready;
 
     logic [31:0] pc;
+    logic [31:0] pc4;
     logic [31:0] imm;
     rv::regaddr_t rd;
     logic reg_wen;
@@ -216,6 +222,7 @@ interface w_if();
     modport master(
         input   valid,
                 pc,
+                pc4,
                 imm,
                 rd,
                 reg_wen,
@@ -224,12 +231,14 @@ interface w_if();
                 alu_sum,
                 mem_type,
                 mem_rdata,
+                csr_value,
         output  ready
     );
 
     modport slave(
         output  valid,
                 pc,
+                pc4,
                 imm,
                 rd,
                 reg_wen,

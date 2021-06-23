@@ -16,7 +16,8 @@
         REG_WSEL_IMM,
         REG_WSEL_MEM,
         REG_WSEL_PC,
-        REG_WSEL_PC4
+        REG_WSEL_PC4,
+        REG_WSEL_CSR
     } reg_wsel_t;
 
     typedef struct packed {
