@@ -1,5 +1,6 @@
 module programmer(
     input  logic clk, rst_in,
+    input  logic enable,
     input  logic data_tick,
     input  logic [7:0] data,
     output logic rst_out,
@@ -25,7 +26,7 @@ module programmer(
         if (rom_bus.wen)
             prog_addr <= prog_addr + 1;
 
-        if (rst_in) begin
+        if (rst_in | !enable) begin
             state <= STATE_START;
             counter <= 0;
             prog_addr <= 0;
