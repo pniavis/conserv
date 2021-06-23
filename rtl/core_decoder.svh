@@ -22,8 +22,8 @@
 
     typedef struct packed {
         logic [31:0] imm;
+        rv::regaddr_t rs1_raw, rs2_raw;
         rv::regaddr_t rs1, rs2, rd;
-        logic want_rs1, want_rs2;
         logic reg_wen;
         reg_wsel_t reg_wsel;
         asel_t asel;

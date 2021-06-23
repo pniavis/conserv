@@ -64,5 +64,6 @@ package rv;
     } csr_addr_t;
 
     localparam INSTR_NOP = 32'h00000013;
+    localparam REG_X0 = rv::regaddr_t'(0);
 
 endpackage

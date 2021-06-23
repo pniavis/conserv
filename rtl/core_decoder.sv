@@ -45,7 +45,9 @@ module core_decoder(
         unique case (ir.opcode)
         rv::OPCODE_OP:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b11;
+                dec.rs1 = ir.rs1;
+                dec.rs2 = ir.rs2;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_ALU;
                 dec.aluop = aluop_op;
@@ -56,7 +58,9 @@ module core_decoder(
             end
         rv::OPCODE_OPIMM:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b10;
+                dec.rs1 = ir.rs1;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_ALU;
                 dec.aluop = aluop_opimm;
@@ -67,7 +71,9 @@ module core_decoder(
             end
         rv::OPCODE_LOAD:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b10;
+                dec.rs1 = ir.rs1;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_MEM;
                 {dec.asel, dec.bsel} = {ASEL_REG, BSEL_IMM};
@@ -77,7 +83,9 @@ module core_decoder(
             end
         rv::OPCODE_STORE:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b11;
+                dec.rs1 = ir.rs1;
+                dec.rs2 = ir.rs2;
+                dec.rd = rv::REG_X0;
                 dec.reg_wen = 1'b0;
                 {dec.asel, dec.bsel} = {ASEL_REG, BSEL_IMM};
                 {dec.mem_ren, dec.mem_wen} = 2'b01;
@@ -86,7 +94,9 @@ module core_decoder(
             end
         rv::OPCODE_LUI:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b00;
+                dec.rs1 = rv::REG_X0;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_IMM;
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
@@ -95,7 +105,9 @@ module core_decoder(
             end
         rv::OPCODE_AUIPC:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b00;
+                dec.rs1 = rv::REG_X0;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_ALU;
                 dec.aluop = ALU_ADD;
@@ -106,7 +118,9 @@ module core_decoder(
             end
         rv::OPCODE_JAL:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b00;
+                dec.rs1 = rv::REG_X0;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_PC4;
                 {dec.asel, dec.bsel} = {ASEL_PC, BSEL_IMM};
@@ -116,7 +130,9 @@ module core_decoder(
             end
         rv::OPCODE_JALR:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b10;
+                dec.rs1 = ir.rs1;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_PC4;
                 {dec.asel, dec.bsel} = {ASEL_REG, BSEL_IMM};
@@ -126,7 +142,9 @@ module core_decoder(
             end
         rv::OPCODE_BRANCH:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b11;
+                dec.rs1 = ir.rs1;
+                dec.rs2 = ir.rs2;
+                dec.rd = rv::REG_X0;
                 dec.reg_wen = 1'b0;
                 {dec.asel, dec.bsel} = {ASEL_PC, BSEL_IMM};
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
@@ -135,7 +153,9 @@ module core_decoder(
             end
         rv::OPCODE_SYSTEM:
             begin
-                {dec.want_rs1, dec.want_rs2} = 2'b00;
+                dec.rs1 = rv::REG_X0;
+                dec.rs2 = rv::REG_X0;
+                dec.rd = ir.rd;
                 dec.reg_wen = 1'b1;
                 dec.reg_wsel = REG_WSEL_CSR;
                 {dec.mem_ren, dec.mem_wen} = 2'b00;
@@ -148,7 +168,8 @@ module core_decoder(
             end
         endcase
 
-        {dec.rs1, dec.rs2, dec.rd} = {ir.rs1, ir.rs2, ir.rd};
+        dec.rs1_raw = ir.rs1;
+        dec.rs2_raw = ir.rs2;
         dec.imm = imm;
         dec.mem_type = ir.funct3;
         dec.branch_cond = rv::funct3b_t'(ir.funct3);

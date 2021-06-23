@@ -12,11 +12,11 @@ module core_decode(
     dec_t dec;
     core_decoder decoder(.ir(d.ir), .dec(dec));
 
-    assign rf_raddr1 = dec.rs1;
-    assign rf_raddr2 = dec.rs2;
+    assign rf_raddr1 = dec.rs1_raw;
+    assign rf_raddr2 = dec.rs2_raw;
 
-    assign {d.rs1, d.want_rs1} = {dec.rs1, dec.want_rs1};
-    assign {d.rs2, d.want_rs2} = {dec.rs2, dec.want_rs2};
+    assign d.rs1 = dec.rs1;
+    assign d.rs2 = dec.rs2;
 
     assign d.csr_addr = dec.csr_addr;
 
