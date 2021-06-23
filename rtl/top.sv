@@ -2,6 +2,7 @@ module top(
 `ifdef SYNTHESIS
     input  logic clk,
     input  logic [0:0] sw,
+    input  logic RxD,
     output logic TxD
 `else
     input  logic clk,
@@ -37,7 +38,8 @@ module top(
 `ifdef SYNTHESIS
     device_uart uart(
         .clk(clk), .rst(rst),
-        .TxD(TxD), .bus(uart_bus.slave)
+        .TxD(TxD), .RxD(RxD),
+        .bus(uart_bus.slave)
     );
 `else
     device_virt_uart uart(
